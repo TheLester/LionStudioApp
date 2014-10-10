@@ -2,30 +2,38 @@ package net.lion_stuido.lionstudio.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.lion_stuido.lionstudio.R;
+import net.lion_stuido.lionstudio.fragments.ImageGridFragment;
 import net.lion_stuido.lionstudio.fragments.NavigationDrawerFragment;
-import net.lion_stuido.lionstudio.tasks.JSONLoader;
+import net.lion_stuido.lionstudio.utils.AppController;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String APP_PREFERENCES = "mysettings";
-    private static final String APP_PREFERENCES_DOMAIN = "domain";
-
+    private static final String APP_PREFERENCES_DOMAIN = "pict_domain";
+    private static final String DEFAULT_DOMAIN = "http://10.0.3.2";
+    private static final String TAG = "MainActivity";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -49,7 +57,6 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        setDomainIfNeeded();
     }
 
     @Override
@@ -57,7 +64,7 @@ public class MainActivity extends Activity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, ImageGridFragment.newInstance(position + 1))
                 .commit();
     }
 
@@ -68,9 +75,6 @@ public class MainActivity extends Activity
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
-                JSONLoader task = new JSONLoader();
-                // passes values for the urls string array
-                task.execute(new String[]{"http://10.0.3.2/albums.php"});
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
@@ -114,51 +118,47 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
 
-        public PlaceholderFragment() {
-        }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        setPictDomainIfNeeded();
     }
 
-    private void setDomainIfNeeded() {
-        SharedPreferences mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        String domain = "";//TODO JSON GET from android_setting table
-        Editor editor = mSettings.edit();
-        if (!mSettings.getString(APP_PREFERENCES_DOMAIN, "").equals(domain))
-            editor.putString(APP_PREFERENCES_DOMAIN, domain);
+    private void setPictDomainIfNeeded() {
+        final SharedPreferences mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        final ProgressDialog pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+
+        JsonObjectRequest urlJsonReq = new JsonObjectRequest(Request.Method.GET,
+                DEFAULT_DOMAIN + "/setting.php", null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String domain = null;
+                        try {
+                            domain = response.getJSONObject("android_setting").getString("url");
+                            Editor editor = mSettings.edit();
+                            if (!mSettings.getString(APP_PREFERENCES_DOMAIN, "").equals(domain)){
+                                editor.putString(APP_PREFERENCES_DOMAIN, domain);
+                                editor.commit();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        pDialog.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                pDialog.dismiss();
+            }
+        });
+        AppController.getInstance().addToRequestQueue(urlJsonReq);
+
     }
 }
