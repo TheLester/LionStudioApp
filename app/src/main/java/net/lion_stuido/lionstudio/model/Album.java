@@ -1,15 +1,13 @@
 package net.lion_stuido.lionstudio.model;
 
-import java.util.Date;
-
 /**
  * Created by lester on 11.10.14.
  */
 public class Album {
     private int id;
     private String ava;
-    private String name;
-    private Date dateTime;
+    private String Name;
+    private String data;
 
     public int getId() {
         return id;
@@ -27,20 +25,24 @@ public class Album {
         this.ava = ava;
     }
 
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        Name = name;
     }
 
-    public Date getDateTime() {
-        return dateTime;
+    @Override
+    public String toString() {
+        return "Album: ID-"+id+"URL thumb-"+ava+",name-"+Name +",date- " +data;
     }
-
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
-    }
-
 }

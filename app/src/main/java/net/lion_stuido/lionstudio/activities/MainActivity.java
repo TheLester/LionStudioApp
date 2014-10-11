@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -24,14 +23,14 @@ import net.lion_stuido.lionstudio.model.Setting;
 import net.lion_stuido.lionstudio.utils.AppController;
 import net.lion_stuido.lionstudio.utils.GsonRequest;
 
+import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
+import static net.lion_stuido.lionstudio.utils.Constants.SETTING_URL;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String APP_PREFERENCES = "mysettings";
     private static final String APP_PREFERENCES_DOMAIN = "pict_domain";
-    private static final String DEFAULT_DOMAIN = "http://10.0.3.2";
-    private static final String SETTING_FILE = "/setting.php";
     private static final String TAG = "MainActivity";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -128,11 +127,10 @@ public class MainActivity extends Activity
         pDialog.setMessage("Loading...");
         pDialog.show();
 
-        GsonRequest<Setting> urlReq = new GsonRequest<Setting>(DEFAULT_DOMAIN + SETTING_FILE, Setting.class, new Response.Listener<Setting>() {
+        GsonRequest<Setting> urlReq = new GsonRequest<Setting>(DEFAULT_DOMAIN + SETTING_URL, Setting.class, new Response.Listener<Setting>() {
             @Override
             public void onResponse(Setting setting) {
                 String domain = setting.getUrl();
-                Toast.makeText(getApplicationContext(),domain,Toast.LENGTH_LONG).show();
                 Editor editor = mSettings.edit();
                 if (!mSettings.getString(APP_PREFERENCES_DOMAIN, "").equals(domain)) {
                     editor.putString(APP_PREFERENCES_DOMAIN, domain);
@@ -148,8 +146,6 @@ public class MainActivity extends Activity
                 pDialog.dismiss();
             }
         });
-
         AppController.getInstance().addToRequestQueue(urlReq);
-
     }
 }
