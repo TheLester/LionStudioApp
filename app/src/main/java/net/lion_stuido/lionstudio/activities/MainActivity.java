@@ -11,20 +11,18 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.lion_stuido.lionstudio.R;
 import net.lion_stuido.lionstudio.fragments.ImageGridFragment;
 import net.lion_stuido.lionstudio.fragments.NavigationDrawerFragment;
+import net.lion_stuido.lionstudio.model.Setting;
 import net.lion_stuido.lionstudio.utils.AppController;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import net.lion_stuido.lionstudio.utils.GsonRequest;
 
 
 public class MainActivity extends Activity
@@ -33,6 +31,7 @@ public class MainActivity extends Activity
     private static final String APP_PREFERENCES = "mysettings";
     private static final String APP_PREFERENCES_DOMAIN = "pict_domain";
     private static final String DEFAULT_DOMAIN = "http://10.0.3.2";
+    private static final String SETTING_FILE = "/setting.php";
     private static final String TAG = "MainActivity";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -63,27 +62,25 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, ImageGridFragment.newInstance(position + 1))
-                .commit();
-    }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
+        switch (position) {
+            case 0:
                 mTitle = getString(R.string.title_section1);
                 break;
-            case 2:
+            case 1:
                 mTitle = getString(R.string.title_section2);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, ImageGridFragment.newInstance())
+                        .commit();
                 break;
-            case 3:
+            case 2:
                 mTitle = getString(R.string.title_section3);
                 break;
-            case 4:
+            case 3:
                 mTitle = getString(R.string.title_section4);
                 break;
         }
     }
+
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
@@ -119,8 +116,6 @@ public class MainActivity extends Activity
     }
 
 
-
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -133,32 +128,28 @@ public class MainActivity extends Activity
         pDialog.setMessage("Loading...");
         pDialog.show();
 
-        JsonObjectRequest urlJsonReq = new JsonObjectRequest(Request.Method.GET,
-                DEFAULT_DOMAIN + "/setting.php", null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        String domain = null;
-                        try {
-                            domain = response.getJSONObject("android_setting").getString("url");
-                            Editor editor = mSettings.edit();
-                            if (!mSettings.getString(APP_PREFERENCES_DOMAIN, "").equals(domain)){
-                                editor.putString(APP_PREFERENCES_DOMAIN, domain);
-                                editor.commit();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        pDialog.dismiss();
-                    }
-                }, new Response.ErrorListener() {
+        GsonRequest<Setting> urlReq = new GsonRequest<Setting>(DEFAULT_DOMAIN + SETTING_FILE, Setting.class, new Response.Listener<Setting>() {
+            @Override
+            public void onResponse(Setting setting) {
+                String domain = setting.getUrl();
+                Toast.makeText(getApplicationContext(),domain,Toast.LENGTH_LONG).show();
+                Editor editor = mSettings.edit();
+                if (!mSettings.getString(APP_PREFERENCES_DOMAIN, "").equals(domain)) {
+                    editor.putString(APP_PREFERENCES_DOMAIN, domain);
+                    editor.commit();
+                }
+
+                pDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 pDialog.dismiss();
             }
         });
-        AppController.getInstance().addToRequestQueue(urlJsonReq);
+
+        AppController.getInstance().addToRequestQueue(urlReq);
 
     }
 }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.etsy.android.grid.util.DynamicHeightImageView;
 
@@ -40,8 +39,6 @@ public class StaggeredGridAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(final int position, View convertView,
                         final ViewGroup parent) {
-
-
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.row_grid_item,
                     parent, false);
@@ -59,22 +56,9 @@ public class StaggeredGridAdapter extends ArrayAdapter<String> {
         vh.imgView.setHeightRatio(positionHeight);
 
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+        imageLoader.get(getItem(position), ImageLoader.getImageListener(vh.imgView,
+                R.drawable.ic_default, R.drawable.ic_error));
 
-// If you are using normal ImageView
-        imageLoader.get(getItem(position), new ImageLoader.ImageListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Image Load Error: " + error.getMessage());
-            }
-
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
-                if (response.getBitmap() != null) {
-                    vh.imgView.setImageBitmap(response.getBitmap());
-                }
-            }
-        });
         return convertView;
     }
 
