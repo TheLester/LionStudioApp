@@ -22,4 +22,9 @@ public class Setting {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public String toString() {
+        return "Android setting: pictures URL - "+url;
+    }
 }

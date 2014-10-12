@@ -1,6 +1,7 @@
 package net.lion_stuido.lionstudio.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,25 +29,25 @@ import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
 /**
  * Created by lester on 10.10.14.
  */
-public class ImageGridFragment extends Fragment implements AbsListView.OnScrollListener, AbsListView.OnItemClickListener {
+public class AlbumGridFragment extends Fragment implements AbsListView.OnScrollListener, AbsListView.OnItemClickListener {
 
     private static final String TAG = "ImageGridFragment";
 
     private StaggeredGridView mGridView;
     private StaggeredGridAdapter mAdapter;
 
-    public static ImageGridFragment newInstance() {
-        ImageGridFragment fragment = new ImageGridFragment();
+    public static AlbumGridFragment newInstance() {
+        AlbumGridFragment fragment = new AlbumGridFragment();
         return fragment;
     }
 
-    public ImageGridFragment() {
+    public AlbumGridFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_image_grid, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_album_grid, container, false);
 
         return rootView;
     }
@@ -55,7 +55,7 @@ public class ImageGridFragment extends Fragment implements AbsListView.OnScrollL
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mGridView = (StaggeredGridView) getActivity().findViewById(R.id.grid_view);
+        mGridView = (StaggeredGridView) getActivity().findViewById(R.id.staggered_grid_view);
         mAdapter = new StaggeredGridAdapter(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<Album>());
         requestAlbumList();
         mGridView.setAdapter(mAdapter);
@@ -65,7 +65,11 @@ public class ImageGridFragment extends Fragment implements AbsListView.OnScrollL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getActivity(), "GOT " + position, Toast.LENGTH_LONG).show();
+        PhotoGridFragment photoGridFragment = PhotoGridFragment.newInstance(((Album)parent.getItemAtPosition(position)).getId());
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, photoGridFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -77,15 +81,6 @@ public class ImageGridFragment extends Fragment implements AbsListView.OnScrollL
         Log.d(TAG, "onScroll firstVisibleItem:" + firstVisibleItem +
                 " visibleItemCount:" + visibleItemCount +
                 " totalItemCount:" + totalItemCount);
-        /*if (!mHasRequestedMore) {
-            int lastInScreen = firstVisibleItem + visibleItemCount;
-            if (lastInScreen >= totalItemCount) {
-                Log.d(TAG, "onScroll lastInScreen - so load more");
-                mHasRequestedMore = true;
-                onLoadMoreItems();
-            }
-        }*/
-
     }
 
     private void requestAlbumList() {

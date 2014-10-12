@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 
 import net.lion_stuido.lionstudio.R;
-import net.lion_stuido.lionstudio.fragments.ImageGridFragment;
+import net.lion_stuido.lionstudio.fragments.AlbumGridFragment;
 import net.lion_stuido.lionstudio.fragments.NavigationDrawerFragment;
 import net.lion_stuido.lionstudio.model.Setting;
 import net.lion_stuido.lionstudio.utils.AppController;
@@ -68,7 +68,7 @@ public class MainActivity extends Activity
             case 1:
                 mTitle = getString(R.string.title_section2);
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, ImageGridFragment.newInstance())
+                        .replace(R.id.container, AlbumGridFragment.newInstance())
                         .commit();
                 break;
             case 2:

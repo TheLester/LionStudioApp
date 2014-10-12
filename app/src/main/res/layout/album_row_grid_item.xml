@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background = "#ffc1c1c1"
+    >
+
 
     <com.etsy.android.grid.util.DynamicHeightImageView
         android:id="@+id/imgView"
@@ -24,7 +27,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#ccc" />
+        android:background="#ff898989" />
 
     <TextView
         android:id="@+id/description"
