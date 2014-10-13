@@ -67,8 +67,9 @@ public class MainActivity extends Activity
                 break;
             case 1:
                 mTitle = getString(R.string.title_section2);
+                mNavigationDrawerFragment.getmDrawerToggle().setDrawerIndicatorEnabled(false);
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, AlbumGridFragment.newInstance())
+                        .replace(R.id.container, AlbumGridFragment.newInstance()).addToBackStack(null)
                         .commit();
                 break;
             case 2:
@@ -80,6 +81,11 @@ public class MainActivity extends Activity
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mNavigationDrawerFragment.getmDrawerToggle().setDrawerIndicatorEnabled(true);
+    }
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();

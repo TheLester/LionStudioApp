@@ -1,13 +1,13 @@
 package net.lion_stuido.lionstudio.fragments;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 
 import com.android.volley.Response;
@@ -29,7 +29,7 @@ import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
 /**
  * Created by lester on 10.10.14.
  */
-public class AlbumGridFragment extends Fragment implements AbsListView.OnScrollListener, AbsListView.OnItemClickListener {
+public class AlbumGridFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private static final String TAG = "ImageGridFragment";
 
@@ -45,10 +45,17 @@ public class AlbumGridFragment extends Fragment implements AbsListView.OnScrollL
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ActionBar actionBar = getActivity().getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_album_grid, container, false);
-
         return rootView;
     }
 
@@ -59,30 +66,27 @@ public class AlbumGridFragment extends Fragment implements AbsListView.OnScrollL
         mAdapter = new StaggeredGridAdapter(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<Album>());
         requestAlbumList();
         mGridView.setAdapter(mAdapter);
-        mGridView.setOnScrollListener(this);
         mGridView.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        PhotoGridFragment photoGridFragment = PhotoGridFragment.newInstance(((Album)parent.getItemAtPosition(position)).getId());
+        PhotoGridFragment photoGridFragment = PhotoGridFragment.newInstance(((Album) parent.getItemAtPosition(position)).getId());
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, photoGridFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
     @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Get item selected and deal with it
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return true;
     }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        Log.d(TAG, "onScroll firstVisibleItem:" + firstVisibleItem +
-                " visibleItemCount:" + visibleItemCount +
-                " totalItemCount:" + totalItemCount);
-    }
-
     private void requestAlbumList() {
         GsonRequest<Album[]> albumReq = new GsonRequest<Album[]>(DEFAULT_DOMAIN + ALBUM_URL, Album[].class, new Response.Listener<Album[]>() {
             @Override
