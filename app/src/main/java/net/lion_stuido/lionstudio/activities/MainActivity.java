@@ -61,22 +61,23 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
+        String[] titles = getResources().getStringArray(R.array.nav_items_titles);
         switch (position) {
             case 0:
-                mTitle = getString(R.string.title_section1);
+                mTitle = titles[0];
                 break;
             case 1:
-                mTitle = getString(R.string.title_section2);
+                mTitle = titles[1];
                 mNavigationDrawerFragment.getmDrawerToggle().setDrawerIndicatorEnabled(false);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, AlbumGridFragment.newInstance()).addToBackStack(null)
                         .commit();
                 break;
             case 2:
-                mTitle = getString(R.string.title_section3);
+                mTitle = titles[2];
                 break;
             case 3:
-                mTitle = getString(R.string.title_section4);
+                mTitle = titles[3];
                 break;
         }
     }

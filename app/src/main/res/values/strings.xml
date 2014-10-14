@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <array name="nav_items_icons">
+        <item>@drawable/ic_news</item>
+        <item>@drawable/ic_photo</item>
+        <item>@drawable/ic_video</item>
+        <item>@drawable/ic_about</item>
+    </array>
+    <array name="nav_items_titles">
+        <item>Новости</item>
+        <item>Альбомы</item>
+        <item>Видео</item>
+        <item>О нас</item>
+    </array>
     <string name="app_name">Lion Studio</string>
-    <string name="title_section1">Новости</string>
-    <string name="title_section2">Альбомы</string>
-    <string name="title_section3">Видео</string>
-    <string name="title_section4">О нас</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>

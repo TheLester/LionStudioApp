@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -18,10 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import net.lion_stuido.lionstudio.R;
+import net.lion_stuido.lionstudio.adapters.NavDrawerListAdapter;
+import net.lion_stuido.lionstudio.model.NavDrawerItem;
+
+import java.util.ArrayList;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -58,6 +62,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
 
     public NavigationDrawerFragment() {
     }
@@ -101,16 +106,8 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                        getString(R.string.title_section4)
-                }));
+        NavDrawerListAdapter mAdapter = new NavDrawerListAdapter(getActivity(),R.layout.drawer_item,getItems());
+        mDrawerListView.setAdapter(mAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
@@ -265,7 +262,15 @@ public class NavigationDrawerFragment extends Fragment {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
     }
-
+    private ArrayList<NavDrawerItem> getItems(){
+        ArrayList<NavDrawerItem> items = new ArrayList<NavDrawerItem>();
+        String[] titles = getResources().getStringArray(R.array.nav_items_titles);
+        TypedArray mIcons = getResources().obtainTypedArray(R.array.nav_items_icons);
+        for (int i = 0; i < titles.length; i++)
+            items.add(new NavDrawerItem(titles[i], mIcons.getResourceId(i, -1)));
+        mIcons.recycle();
+        return items;
+    }
     private ActionBar getActionBar() {
         return getActivity().getActionBar();
     }
