@@ -19,6 +19,7 @@ import com.android.volley.VolleyLog;
 import net.lion_stuido.lionstudio.R;
 import net.lion_stuido.lionstudio.fragments.AlbumGridFragment;
 import net.lion_stuido.lionstudio.fragments.NavigationDrawerFragment;
+import net.lion_stuido.lionstudio.fragments.NewsFragment;
 import net.lion_stuido.lionstudio.model.Setting;
 import net.lion_stuido.lionstudio.utils.AppController;
 import net.lion_stuido.lionstudio.utils.GsonRequest;
@@ -65,12 +66,14 @@ public class MainActivity extends Activity
         switch (position) {
             case 0:
                 mTitle = titles[0];
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, NewsFragment.newInstance())
+                        .commit();
                 break;
             case 1:
                 mTitle = titles[1];
-                mNavigationDrawerFragment.getmDrawerToggle().setDrawerIndicatorEnabled(false);
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, AlbumGridFragment.newInstance()).addToBackStack(null)
+                        .replace(R.id.container, AlbumGridFragment.newInstance())
                         .commit();
                 break;
             case 2:
@@ -80,12 +83,6 @@ public class MainActivity extends Activity
                 mTitle = titles[3];
                 break;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mNavigationDrawerFragment.getmDrawerToggle().setDrawerIndicatorEnabled(true);
     }
 
     public void restoreActionBar() {

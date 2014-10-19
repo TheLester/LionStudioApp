@@ -18,9 +18,9 @@ import java.util.List;
  * Created by lester on 14.10.14.
  */
 public class NavDrawerListAdapter extends ArrayAdapter<NavDrawerItem> {
-    Context context;
-    List<NavDrawerItem> drawerItemList;
-    int layoutResID;
+    private Context context;
+    private List<NavDrawerItem> drawerItemList;
+    private int layoutResID;
 
     public NavDrawerListAdapter(Context context, int layoutResourceID,
                                List<NavDrawerItem> listItems) {
@@ -53,7 +53,7 @@ public class NavDrawerListAdapter extends ArrayAdapter<NavDrawerItem> {
 
         }
 
-        NavDrawerItem dItem = (NavDrawerItem) this.drawerItemList.get(position);
+        NavDrawerItem dItem = this.drawerItemList.get(position);
 
         drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
                 dItem.getIcon()));

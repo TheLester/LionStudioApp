@@ -6,7 +6,6 @@
     android:background="?android:attr/activatedBackgroundIndicator"
     >
 
-
     <ImageView
         android:id="@+id/icon_drawer_item"
         android:layout_width="25dp"
@@ -15,9 +14,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-
        />
-
 
     <TextView
         android:id="@+id/title_drawer_item"
@@ -29,6 +26,5 @@
         android:textAppearance="?android:attr/textAppearanceListItem"
         android:textColor="@color/white"
         />
-
 
 </RelativeLayout>

@@ -1,22 +1,20 @@
 package net.lion_stuido.lionstudio.fragments;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.etsy.android.grid.StaggeredGridView;
 
 import net.lion_stuido.lionstudio.R;
-import net.lion_stuido.lionstudio.adapters.StaggeredGridAdapter;
+import net.lion_stuido.lionstudio.adapters.AlbumGridAdapter;
 import net.lion_stuido.lionstudio.model.Album;
 import net.lion_stuido.lionstudio.utils.AppController;
 import net.lion_stuido.lionstudio.utils.GsonRequest;
@@ -33,8 +31,8 @@ public class AlbumGridFragment extends Fragment implements AdapterView.OnItemCli
 
     private static final String TAG = "ImageGridFragment";
 
-    private StaggeredGridView mGridView;
-    private StaggeredGridAdapter mAdapter;
+    private GridView mGridView;
+    private AlbumGridAdapter mAdapter;
 
     public static AlbumGridFragment newInstance() {
         AlbumGridFragment fragment = new AlbumGridFragment();
@@ -42,14 +40,6 @@ public class AlbumGridFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     public AlbumGridFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActionBar actionBar = getActivity().getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -62,30 +52,32 @@ public class AlbumGridFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mGridView = (StaggeredGridView) getActivity().findViewById(R.id.staggered_grid_view);
-        mAdapter = new StaggeredGridAdapter(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<Album>());
+        mGridView = (GridView) getActivity().findViewById(R.id.staggered_grid_view);
+        mAdapter = new AlbumGridAdapter(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<Album>());
         requestAlbumList();
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(this);
-    }
 
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        setIndicatorEnabled(true);
+    }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        PhotoGridFragment photoGridFragment = PhotoGridFragment.newInstance(((Album) parent.getItemAtPosition(position)).getId());
+        Album currentAlbum = (Album) parent.getItemAtPosition(position);
+        PhotoGridFragment photoGridFragment = PhotoGridFragment.newInstance(currentAlbum);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, photoGridFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+        setIndicatorEnabled(false);
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Get item selected and deal with it
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getActivity().onBackPressed();
-                return true;
-        }
-        return true;
+    private void setIndicatorEnabled(boolean status){
+        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment.getmDrawerToggle().setDrawerIndicatorEnabled(status);
     }
     private void requestAlbumList() {
         GsonRequest<Album[]> albumReq = new GsonRequest<Album[]>(DEFAULT_DOMAIN + ALBUM_URL, Album[].class, new Response.Listener<Album[]>() {
