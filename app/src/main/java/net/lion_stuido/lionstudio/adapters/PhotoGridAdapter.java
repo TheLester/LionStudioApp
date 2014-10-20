@@ -23,8 +23,9 @@ import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
 public class PhotoGridAdapter extends ArrayAdapter<Photo> {
     private final LayoutInflater mLayoutInflater;
     private ViewHolder holder;
+
     public PhotoGridAdapter(Context context, int layoutResourceId,
-                           ArrayList<Photo> data) {
+                            ArrayList<Photo> data) {
         super(context, layoutResourceId, data);
         this.mLayoutInflater = LayoutInflater.from(context);
     }
@@ -44,7 +45,7 @@ public class PhotoGridAdapter extends ArrayAdapter<Photo> {
 
         Photo currentPhoto = getItem(position);
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-        imageLoader.get(DEFAULT_DOMAIN+currentPhoto.getFilename(), ImageLoader.getImageListener(holder.image,
+        imageLoader.get(DEFAULT_DOMAIN + currentPhoto.getFilename(), ImageLoader.getImageListener(holder.image,
                 R.drawable.ic_default, R.drawable.ic_error));
 
         return row;

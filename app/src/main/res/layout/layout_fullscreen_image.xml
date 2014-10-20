@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/photo_full_size"
@@ -9,26 +9,39 @@
         android:layout_height="fill_parent"
         android:scaleType="fitCenter" />
 
-    <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:id="@+id/imageButtonLike"
-        android:background="@drawable/ic_like"
-        android:layout_alignTop="@+id/imageButtonComment"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="75dp"
-        />
-
-    <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:id="@+id/imageButtonComment"
-        android:background="@drawable/ic_comment"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="75dp" />
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="15dp">
 
+        <Button
+            android:id="@+id/button_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttons_selector"
+            android:drawableLeft="@drawable/ic_comment"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="@string/comment"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/button_like"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttons_selector"
+            android:drawableRight="@drawable/ic_like"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="@string/like"
+            android:textSize="24sp" />
+    </LinearLayout>
 
 </RelativeLayout>

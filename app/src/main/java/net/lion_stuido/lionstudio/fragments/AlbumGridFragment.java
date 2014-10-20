@@ -27,7 +27,7 @@ import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
 /**
  * Created by lester on 10.10.14.
  */
-public class AlbumGridFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class AlbumGridFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = "ImageGridFragment";
 
@@ -59,11 +59,13 @@ public class AlbumGridFragment extends Fragment implements AdapterView.OnItemCli
         mGridView.setOnItemClickListener(this);
 
     }
+
     @Override
     public void onResume() {
         super.onResume();
         setIndicatorEnabled(true);
     }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Album currentAlbum = (Album) parent.getItemAtPosition(position);
@@ -74,11 +76,13 @@ public class AlbumGridFragment extends Fragment implements AdapterView.OnItemCli
         transaction.commit();
         setIndicatorEnabled(false);
     }
-    private void setIndicatorEnabled(boolean status){
+
+    private void setIndicatorEnabled(boolean status) {
         NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.getmDrawerToggle().setDrawerIndicatorEnabled(status);
     }
+
     private void requestAlbumList() {
         GsonRequest<Album[]> albumReq = new GsonRequest<Album[]>(DEFAULT_DOMAIN + ALBUM_URL, Album[].class, new Response.Listener<Album[]>() {
             @Override

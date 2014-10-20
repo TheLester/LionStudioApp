@@ -1,10 +1,13 @@
 package net.lion_stuido.lionstudio.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,11 +26,32 @@ public class PhotoPagerFragment extends Fragment {
     private ViewPager viewPager;
     private int position;
 
-    public static PhotoPagerFragment newInstance(List<Photo> photoList,int position) {
+    public static PhotoPagerFragment newInstance(List<Photo> photoList, int position) {
         PhotoPagerFragment fragment = new PhotoPagerFragment();
         fragment.photoList = photoList;
         fragment.position = position;
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Get item selected and deal with it
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.remove(this);
+                ft.commit();
+                manager.popBackStack();
+                return true;
+        }
+        return true;
     }
 
     @Nullable
@@ -42,7 +66,7 @@ public class PhotoPagerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
-        adapter = new FullScreenImageAdapter(photoList,getActivity());
+        adapter = new FullScreenImageAdapter(photoList, getActivity());
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
     }

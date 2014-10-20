@@ -25,6 +25,6 @@ public class Setting {
 
     @Override
     public String toString() {
-        return "Android setting: pictures URL - "+url;
+        return "Android setting: pictures URL - " + url;
     }
 }

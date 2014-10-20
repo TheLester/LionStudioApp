@@ -70,6 +70,7 @@ public class NavigationDrawerFragment extends Fragment {
     public ActionBarDrawerToggle getmDrawerToggle() {
         return mDrawerToggle;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +107,7 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        NavDrawerListAdapter mAdapter = new NavDrawerListAdapter(getActivity(),R.layout.drawer_item,getItems());
+        NavDrawerListAdapter mAdapter = new NavDrawerListAdapter(getActivity(), R.layout.drawer_item, getItems());
         mDrawerListView.setAdapter(mAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -262,7 +263,8 @@ public class NavigationDrawerFragment extends Fragment {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
     }
-    private ArrayList<NavDrawerItem> getItems(){
+
+    private ArrayList<NavDrawerItem> getItems() {
         ArrayList<NavDrawerItem> items = new ArrayList<NavDrawerItem>();
         String[] titles = getResources().getStringArray(R.array.nav_items_titles);
         TypedArray mIcons = getResources().obtainTypedArray(R.array.nav_items_icons);
@@ -271,6 +273,7 @@ public class NavigationDrawerFragment extends Fragment {
         mIcons.recycle();
         return items;
     }
+
     private ActionBar getActionBar() {
         return getActivity().getActionBar();
     }

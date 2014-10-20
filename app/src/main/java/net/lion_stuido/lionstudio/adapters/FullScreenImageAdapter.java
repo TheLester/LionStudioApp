@@ -7,30 +7,41 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 
 import net.lion_stuido.lionstudio.R;
 import net.lion_stuido.lionstudio.model.Photo;
+import net.lion_stuido.lionstudio.model.ResponseStatus;
 import net.lion_stuido.lionstudio.utils.AppController;
+import net.lion_stuido.lionstudio.utils.GsonRequest;
 
 import java.util.List;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
+import static net.lion_stuido.lionstudio.utils.Constants.PHOTO_URL;
 
 /**
  * Created by lester on 19.10.14.
  */
 public class FullScreenImageAdapter extends PagerAdapter {
+    private final String TAG = "FullScreenImageAdapter";
     private List<Photo> photoList;
     private Activity activity;
     private PhotoViewAttacher mAttacher;
-    public FullScreenImageAdapter(List<Photo> photoList,Activity activity) {
+    private Button like;
+    private Button comment;
+
+    public FullScreenImageAdapter(List<Photo> photoList, Activity activity) {
         this.photoList = photoList;
         this.activity = activity;
     }
@@ -39,34 +50,57 @@ public class FullScreenImageAdapter extends PagerAdapter {
     public int getCount() {
         return photoList.size();
     }
+
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView imgDisplay;
-        ImageButton like;
-        ImageButton comment;
+
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.layout_fullscreen_image, container,
                 false);
         imgDisplay = (ImageView) viewLayout.findViewById(R.id.photo_full_size);
-        like = (ImageButton) viewLayout.findViewById(R.id.imageButtonLike);
-        comment = (ImageButton) viewLayout.findViewById(R.id.imageButtonComment);
+        like = (Button) viewLayout.findViewById(R.id.button_like);
+        comment = (Button) viewLayout.findViewById(R.id.button_comment);
         Photo currentPhoto = photoList.get(position);
+        setButtonLikeListener(currentPhoto.getId());
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-        imageLoader.get(DEFAULT_DOMAIN+currentPhoto.getFilename(), ImageLoader.getImageListener(imgDisplay,
+        imageLoader.get(DEFAULT_DOMAIN + currentPhoto.getFilename(), ImageLoader.getImageListener(imgDisplay,
                 R.drawable.ic_default, R.drawable.ic_error));
         mAttacher = new PhotoViewAttacher(imgDisplay);
         ((ViewPager) container).addView(viewLayout);
         return viewLayout;
     }
+
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == ((RelativeLayout) object);
     }
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         ((ViewPager) container).removeView((RelativeLayout) object);
-
     }
 
+    private void setButtonLikeListener(final int photo_id) {
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GsonRequest<ResponseStatus> photosReq = new GsonRequest<ResponseStatus>(DEFAULT_DOMAIN + PHOTO_URL + "?photo_id=" + photo_id,
+                        ResponseStatus.class, new Response.Listener<ResponseStatus>() {
+                    @Override
+                    public void onResponse(ResponseStatus responseStatus) {
+                        if (responseStatus.getStatus().equals("OK"))
+                            Toast.makeText(activity, "Вам понравилось фото!", Toast.LENGTH_LONG).show();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d(TAG, "Error: " + error.getMessage());
+                    }
+                });
+                AppController.getInstance().addToRequestQueue(photosReq);
+            }
+        });
+    }
 }

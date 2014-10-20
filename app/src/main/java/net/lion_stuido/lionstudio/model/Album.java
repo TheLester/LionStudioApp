@@ -43,6 +43,6 @@ public class Album {
 
     @Override
     public String toString() {
-        return "Album: ID-"+id+"URL thumb-"+ava+",name-"+Name +",date- " +data;
+        return "Album: ID-" + id + "URL thumb-" + ava + ",name-" + Name + ",date- " + data;
     }
 }

@@ -52,6 +52,6 @@ public class Photo {
 
     @Override
     public String toString() {
-        return "Photo: URL- "+filename+", album_id="+album_id+", date- "+date+", likes- "+like;
+        return "Photo: URL- " + filename + ", album_id=" + album_id + ", date- " + date + ", likes- " + like;
     }
 }

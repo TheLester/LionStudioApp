@@ -106,7 +106,7 @@ public class PhotoGridFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        PhotoPagerFragment photoPagerFragment = PhotoPagerFragment.newInstance(photoList,position);
+        PhotoPagerFragment photoPagerFragment = PhotoPagerFragment.newInstance(photoList, position);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, photoPagerFragment);
         transaction.addToBackStack(null);

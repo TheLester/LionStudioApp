@@ -23,7 +23,7 @@ public class NavDrawerListAdapter extends ArrayAdapter<NavDrawerItem> {
     private int layoutResID;
 
     public NavDrawerListAdapter(Context context, int layoutResourceID,
-                               List<NavDrawerItem> listItems) {
+                                List<NavDrawerItem> listItems) {
         super(context, layoutResourceID, listItems);
         this.context = context;
         this.drawerItemList = listItems;

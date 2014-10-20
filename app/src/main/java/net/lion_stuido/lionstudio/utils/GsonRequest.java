@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 /**
- * Volley adapter for JSON requests with POST method that will be parsed into Java objects by Gson.
+ * Volley adapter for JSON requests with HTTP method that will be parsed into Java objects by Gson.
  */
 public class GsonRequest<T> extends Request<T> {
     private Gson mGson = new Gson();
@@ -27,14 +27,14 @@ public class GsonRequest<T> extends Request<T> {
     /**
      * Make a GET request and return a parsed object from JSON.
      *
-     * @param url URL of the request to make
+     * @param url   URL of the request to make
      * @param clazz Relevant class object, for Gson's reflection
      */
     public GsonRequest(
-                       String url,
-                       Class<T> clazz,
-                       Listener<T> listener,
-                       ErrorListener errorListener) {
+            String url,
+            Class<T> clazz,
+            Listener<T> listener,
+            ErrorListener errorListener) {
         super(Method.GET, url, errorListener);
         this.clazz = clazz;
         this.listener = listener;
@@ -44,10 +44,10 @@ public class GsonRequest<T> extends Request<T> {
     /**
      * Make a POST request and return a parsed object from JSON.
      *
-     * @param url URL of the request to make
+     * @param url   URL of the request to make
      * @param clazz Relevant class object, for Gson's reflection
      */
-    public GsonRequest( String url,
+    public GsonRequest(String url,
                        Class<T> clazz,
                        Map<String, String> params,
                        Listener<T> listener,

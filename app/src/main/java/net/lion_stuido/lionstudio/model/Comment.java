@@ -61,6 +61,6 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "Comment by "+name+",date "+data+",photo_id "+photo_id+":["+text+"]";
+        return "Comment by " + name + ",date " + data + ",photo_id " + photo_id + ":[" + text + "]";
     }
 }
