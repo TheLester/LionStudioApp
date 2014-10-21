@@ -1,6 +1,7 @@
 package net.lion_stuido.lionstudio.adapters;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,12 +19,15 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 
 import net.lion_stuido.lionstudio.R;
+import net.lion_stuido.lionstudio.fragments.PhotoCommentFragment;
 import net.lion_stuido.lionstudio.model.Photo;
 import net.lion_stuido.lionstudio.model.ResponseStatus;
 import net.lion_stuido.lionstudio.utils.AppController;
 import net.lion_stuido.lionstudio.utils.GsonRequest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -64,6 +68,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
         comment = (Button) viewLayout.findViewById(R.id.button_comment);
         Photo currentPhoto = photoList.get(position);
         setButtonLikeListener(currentPhoto.getId());
+        setButtonCommentListener(currentPhoto);
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
         imageLoader.get(DEFAULT_DOMAIN + currentPhoto.getFilename(), ImageLoader.getImageListener(imgDisplay,
                 R.drawable.ic_default, R.drawable.ic_error));
@@ -86,12 +91,15 @@ public class FullScreenImageAdapter extends PagerAdapter {
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GsonRequest<ResponseStatus> photosReq = new GsonRequest<ResponseStatus>(DEFAULT_DOMAIN + PHOTO_URL + "?photo_id=" + photo_id,
-                        ResponseStatus.class, new Response.Listener<ResponseStatus>() {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("photoid", String.valueOf(photo_id));
+                GsonRequest<ResponseStatus> photosReq = new GsonRequest<ResponseStatus>(DEFAULT_DOMAIN + PHOTO_URL,
+                        ResponseStatus.class, headers, null, new Response.Listener<ResponseStatus>() {
                     @Override
                     public void onResponse(ResponseStatus responseStatus) {
                         if (responseStatus.getStatus().equals("OK"))
                             Toast.makeText(activity, "Вам понравилось фото!", Toast.LENGTH_LONG).show();
+                        else Toast.makeText(activity, "Ошибка", Toast.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -100,6 +108,19 @@ public class FullScreenImageAdapter extends PagerAdapter {
                     }
                 });
                 AppController.getInstance().addToRequestQueue(photosReq);
+            }
+        });
+    }
+
+    private void setButtonCommentListener(final Photo photo) {
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PhotoCommentFragment commentFragment = PhotoCommentFragment.newInstance(photo);
+                FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, commentFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
     }

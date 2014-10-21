@@ -61,6 +61,27 @@ public class GsonRequest<T> extends Request<T> {
         mGson = new Gson();
     }
 
+    /**
+     * Make a PUT request and return a parsed object from JSON.
+     *
+     * @param url   URL of the request to make
+     * @param clazz Relevant class object, for Gson's reflection
+     */
+    public GsonRequest(String url,
+                       Class<T> clazz,
+                       Map<String, String> headers,
+                       Map<String, String> params,
+                       Listener<T> listener,
+                       ErrorListener errorListener) {
+
+        super(Method.PUT, url, errorListener);
+        this.clazz = clazz;
+        this.params = params;
+        this.listener = listener;
+        this.headers = headers;
+        mGson = new Gson();
+    }
+
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         return headers != null ? headers : super.getHeaders();

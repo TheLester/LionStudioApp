@@ -30,7 +30,9 @@
             android:padding="5dp"
             android:text="@string/comment"
             android:textSize="24sp" />
-
+        <TextView
+            android:layout_width="5sp"
+            android:layout_height="fill_parent" />
         <Button
             android:id="@+id/button_like"
             android:layout_width="0dp"
