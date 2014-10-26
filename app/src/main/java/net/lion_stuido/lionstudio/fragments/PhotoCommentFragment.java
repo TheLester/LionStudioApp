@@ -6,7 +6,6 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,17 +75,12 @@ public class PhotoCommentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_photo_comment, container, false);
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ListView listview = (ListView) getActivity().findViewById(R.id.messagesContainer);
+        ListView listview = (ListView) rootView.findViewById(R.id.messagesContainer);
         adapter = new CommentsAdapter(getActivity(), photo, new ArrayList<Comment>());
         requestComments();
         listview.setAdapter(adapter);
-        setSendButtonListener();
+        setSendButtonListener(rootView);
+        return rootView;
     }
 
     private void requestComments() {
@@ -104,10 +98,10 @@ public class PhotoCommentFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(commentsRequest);
     }
 
-    private void setSendButtonListener() {
-        Button sendButton = (Button) getActivity().findViewById(R.id.btn_send_comment);
-        final EditText editTextAuthor = (EditText) getActivity().findViewById(R.id.edit_text_author);
-        final EditText editTextComment = (EditText) getActivity().findViewById(R.id.edit_text_comment);
+    private void setSendButtonListener(View rootView) {
+        Button sendButton = (Button) rootView.findViewById(R.id.btn_send_comment);
+        final EditText editTextAuthor = (EditText) rootView.findViewById(R.id.edit_text_author);
+        final EditText editTextComment = (EditText) rootView.findViewById(R.id.edit_text_comment);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,14 +131,13 @@ public class PhotoCommentFragment extends Fragment {
                 ResponseStatus.class, params, new Response.Listener<ResponseStatus>() {
             @Override
             public void onResponse(ResponseStatus responseStatus) {
-                if (responseStatus.getStatus() == "OK") {
+                if (responseStatus.getStatus().equals("OK")) {
                     Comment comment = new Comment();
                     comment.setData(getResources().getString(R.string.now));
                     comment.setName(author);
                     comment.setText(commentText);
                     showComment(comment);
-                    Log.i(TAG, comment.toString());
-                } else if (responseStatus.getStatus() == "Error")
+                } else if (responseStatus.getStatus().equals("Error"))
                     Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_LONG).show();
                 pDialog.dismiss();
             }

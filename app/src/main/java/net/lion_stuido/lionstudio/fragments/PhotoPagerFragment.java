@@ -59,15 +59,10 @@ public class PhotoPagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_photo_pager, container, false);
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
+        viewPager = (ViewPager) rootView.findViewById(R.id.pager);
         adapter = new FullScreenImageAdapter(photoList, getActivity());
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
+        return rootView;
     }
 }

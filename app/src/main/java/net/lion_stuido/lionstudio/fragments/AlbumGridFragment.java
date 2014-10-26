@@ -46,19 +46,14 @@ public class AlbumGridFragment extends Fragment implements AdapterView.OnItemCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_album_grid, container, false);
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mGridView = (GridView) getActivity().findViewById(R.id.staggered_grid_view);
+        mGridView = (GridView)rootView.findViewById(R.id.staggered_grid_view);
         mAdapter = new AlbumGridAdapter(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<Album>());
         requestAlbumList();
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(this);
-
+        return rootView;
     }
+
 
     @Override
     public void onResume() {

@@ -55,18 +55,14 @@ public class PhotoGridFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_photo_grid, container, false);
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mGridView = (GridView) getActivity().findViewById(R.id.gridView);
+        mGridView = (GridView)rootView.findViewById(R.id.gridView);
         mAdapter = new PhotoGridAdapter(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<Photo>());
         requestPhotoList(currentAlbum.getId());
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(this);
+        return rootView;
     }
+
 
     private void requestPhotoList(int album_id) {
         String uri = String.format(DEFAULT_DOMAIN + PHOTO_URL + "?album_id=%d",
