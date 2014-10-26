@@ -6,4 +6,5 @@
     <color name="album_line">#fff18984</color>
     <color name ="album_background">#cc2c322c</color>
     <color name ="button_background">#cc483f1d</color>
+    <color name ="username">#cc0d970d</color>
 </resources>

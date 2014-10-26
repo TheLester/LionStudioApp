@@ -19,4 +19,10 @@
     <string name="comment">Отзыв</string>
     <string name="send">Отправить</string>
     <string name="like">Лайк</string>
+    <string name="author">Никнейм</string>
+    <string name="message">Текст отзыва</string>
+    <string name="empty_fields">Введите имя и отзыв</string>
+    <string name="loading">Загрузка</string>
+    <string name="now">Только что</string>
+    <string name="error">Ошибка</string>
 </resources>

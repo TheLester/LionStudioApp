@@ -19,8 +19,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/btn_send_comment"
-            android:autoText="true" />
-
+            android:hint="@string/comment" />
+        <EditText
+            android:id="@+id/edit_text_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/edit_text_comment"
+            android:layout_toLeftOf="@+id/btn_send_comment"
+            android:hint="@string/author" />
 
         <Button
             android:id="@+id/btn_send_comment"
@@ -35,9 +41,8 @@
             android:id="@+id/messagesContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/edit_text_comment"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
+            android:layout_above="@+id/edit_text_author"
+            android:layout_alignParentTop="true"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="10dp"
             android:divider="@color/white"

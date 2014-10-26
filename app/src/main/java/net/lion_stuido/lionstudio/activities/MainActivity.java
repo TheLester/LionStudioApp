@@ -60,6 +60,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         String[] titles = getResources().getStringArray(R.array.nav_items_titles);

@@ -41,14 +41,19 @@ public class CommentsAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void addItem(Comment item) {
+    public void add(Comment item) {
         commentList.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void add(List<Comment> items) {
+        commentList.addAll(items);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return commentList.size() + 2;
+        return commentList.size() + TYPE_COMMENT;
     }
 
     @Override
@@ -78,25 +83,52 @@ public class CommentsAdapter extends BaseAdapter {
         View v = convertView;
         int type = getItemViewType(position);
         if (type == TYPE_PHOTO) {
+            PhotoViewHolder photoViewHolder = new PhotoViewHolder();
             // Inflate the layout with image
             v = inflater.inflate(R.layout.list_row_image, parent, false);
             ImageView photoView = (ImageView) v.findViewById(R.id.photo_comments);
             ImageLoader imageLoader = AppController.getInstance().getImageLoader();
             imageLoader.get(DEFAULT_DOMAIN + photo.getFilename(), ImageLoader.getImageListener(photoView,
                     R.drawable.ic_default, R.drawable.ic_error));
+            photoViewHolder.photo = photoView;
+            v.setTag(photoViewHolder);
         } else if (type == TYPE_LIKE_NUM) {
             v = inflater.inflate(R.layout.list_row_likes, parent, false);
             TextView likes = (TextView) v.findViewById(R.id.text_likes_num);
-            likes.setText(String.valueOf(photo.getLike()) + " лайк(ов)");
-        } else {
+            likes.setText(String.valueOf(photo.getLike()));
+            LikesViewHolder likesViewHolder = new LikesViewHolder();
+            likesViewHolder.likes = likes;
+            v.setTag(likesViewHolder);
+        } else if (type == TYPE_COMMENT) {
             v = inflater.inflate(R.layout.list_row_comment, parent, false);
+            TextView author = (TextView) v.findViewById(R.id.text_comment_author);
             TextView comment = (TextView) v.findViewById(R.id.text_comment);
             TextView commentDate = (TextView) v.findViewById(R.id.text_comment_date);
             Comment currentComment = commentList.get(position - TYPE_COMMENT);
+            author.setText(currentComment.getName());
             comment.setText(currentComment.getText());
             commentDate.setText(currentComment.getData());
+            CommentViewHolder commentViewHolder = new CommentViewHolder();
+            commentViewHolder.author = author;
+            commentViewHolder.comment = comment;
+            commentViewHolder.date = commentDate;
+            v.setTag(commentViewHolder);
         }
 
         return v;
+    }
+
+    private static class CommentViewHolder {
+        public TextView author;
+        public TextView comment;
+        public TextView date;
+    }
+
+    private static class PhotoViewHolder {
+        public ImageView photo;
+    }
+
+    private static class LikesViewHolder {
+        public TextView likes;
     }
 }
