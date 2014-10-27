@@ -33,6 +33,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
 import static net.lion_stuido.lionstudio.utils.Constants.PHOTO_URL;
+import static net.lion_stuido.lionstudio.utils.Constants.getPicturesDomain;
 
 /**
  * Created by lester on 19.10.14.
@@ -70,7 +71,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
         setButtonLikeListener(currentPhoto.getId());
         setButtonCommentListener(currentPhoto);
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-        imageLoader.get(DEFAULT_DOMAIN + currentPhoto.getFilename(), ImageLoader.getImageListener(imgDisplay,
+        imageLoader.get(getPicturesDomain(activity) + currentPhoto.getFilename(), ImageLoader.getImageListener(imgDisplay,
                 R.drawable.ic_default, R.drawable.ic_error));
         mAttacher = new PhotoViewAttacher(imgDisplay);
         ((ViewPager) container).addView(viewLayout);

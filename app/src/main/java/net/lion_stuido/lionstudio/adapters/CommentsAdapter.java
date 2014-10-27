@@ -17,7 +17,7 @@ import net.lion_stuido.lionstudio.utils.AppController;
 
 import java.util.List;
 
-import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
+import static net.lion_stuido.lionstudio.utils.Constants.getPicturesDomain;
 
 /**
  * Created by lester on 21.10.14.
@@ -88,7 +88,7 @@ public class CommentsAdapter extends BaseAdapter {
             v = inflater.inflate(R.layout.list_row_image, parent, false);
             ImageView photoView = (ImageView) v.findViewById(R.id.photo_comments);
             ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-            imageLoader.get(DEFAULT_DOMAIN + photo.getFilename(), ImageLoader.getImageListener(photoView,
+            imageLoader.get(getPicturesDomain(context) + photo.getFilename(), ImageLoader.getImageListener(photoView,
                     R.drawable.ic_default, R.drawable.ic_error));
             photoViewHolder.photo = photoView;
             v.setTag(photoViewHolder);

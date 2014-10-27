@@ -16,7 +16,7 @@ import net.lion_stuido.lionstudio.view.SquareImageView;
 
 import java.util.ArrayList;
 
-import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
+import static net.lion_stuido.lionstudio.utils.Constants.*;
 
 /**
  * Created by lester on 10.10.14.
@@ -26,10 +26,11 @@ public class AlbumGridAdapter extends ArrayAdapter<Album> {
     private static final String TAG = "SampleAdapter";
     private final LayoutInflater mLayoutInflater;
     private ViewHolder vh;
-
+    private Context context;
     public AlbumGridAdapter(Context context, int textViewResourceId,
                             ArrayList<Album> objects) {
         super(context, textViewResourceId, objects);
+        this.context = context;
         this.mLayoutInflater = LayoutInflater.from(context);
     }
 
@@ -50,7 +51,7 @@ public class AlbumGridAdapter extends ArrayAdapter<Album> {
 
         Album currentAlbum = getItem(position);
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-        imageLoader.get(DEFAULT_DOMAIN + currentAlbum.getAva(), ImageLoader.getImageListener(vh.imgView,
+        imageLoader.get(getPicturesDomain(context) + currentAlbum.getAva(), ImageLoader.getImageListener(vh.imgView,
                 R.drawable.ic_default, R.drawable.ic_error));
         vh.description.setSelected(true);
         vh.description.setText(currentAlbum.getName());
@@ -62,4 +63,5 @@ public class AlbumGridAdapter extends ArrayAdapter<Album> {
         TextView description;
 
     }
+
 }

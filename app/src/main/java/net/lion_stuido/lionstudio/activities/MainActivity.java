@@ -24,14 +24,10 @@ import net.lion_stuido.lionstudio.model.Setting;
 import net.lion_stuido.lionstudio.utils.AppController;
 import net.lion_stuido.lionstudio.utils.GsonRequest;
 
-import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
-import static net.lion_stuido.lionstudio.utils.Constants.SETTING_URL;
+import static net.lion_stuido.lionstudio.utils.Constants.*;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
-    private static final String APP_PREFERENCES = "mysettings";
-    private static final String APP_PREFERENCES_DOMAIN = "pict_domain";
     private static final String TAG = "MainActivity";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.

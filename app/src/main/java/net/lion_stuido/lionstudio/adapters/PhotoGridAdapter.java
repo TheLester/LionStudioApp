@@ -15,7 +15,7 @@ import net.lion_stuido.lionstudio.utils.AppController;
 
 import java.util.ArrayList;
 
-import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
+import static net.lion_stuido.lionstudio.utils.Constants.getPicturesDomain;
 
 /**
  * Created by lester on 12.10.14.
@@ -23,10 +23,12 @@ import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
 public class PhotoGridAdapter extends ArrayAdapter<Photo> {
     private final LayoutInflater mLayoutInflater;
     private ViewHolder holder;
+    private Context context;
 
     public PhotoGridAdapter(Context context, int layoutResourceId,
                             ArrayList<Photo> data) {
         super(context, layoutResourceId, data);
+        this.context = context;
         this.mLayoutInflater = LayoutInflater.from(context);
     }
 
@@ -45,7 +47,7 @@ public class PhotoGridAdapter extends ArrayAdapter<Photo> {
 
         Photo currentPhoto = getItem(position);
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-        imageLoader.get(DEFAULT_DOMAIN + currentPhoto.getFilename(), ImageLoader.getImageListener(holder.image,
+        imageLoader.get(getPicturesDomain(context) + currentPhoto.getFilename(), ImageLoader.getImageListener(holder.image,
                 R.drawable.ic_default, R.drawable.ic_error));
 
         return row;
