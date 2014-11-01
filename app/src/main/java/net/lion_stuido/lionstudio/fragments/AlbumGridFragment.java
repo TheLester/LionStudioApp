@@ -21,8 +21,8 @@ import net.lion_stuido.lionstudio.utils.GsonRequest;
 
 import java.util.ArrayList;
 
-import static net.lion_stuido.lionstudio.utils.Constants.ALBUM_URL;
-import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
+import static net.lion_stuido.lionstudio.utils.Settings.ALBUM_URL;
+import static net.lion_stuido.lionstudio.utils.Settings.DEFAULT_DOMAIN;
 
 /**
  * Created by lester on 10.10.14.

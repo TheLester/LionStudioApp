@@ -65,4 +65,5 @@ public class PhotoPagerFragment extends Fragment {
         viewPager.setCurrentItem(position);
         return rootView;
     }
+
 }

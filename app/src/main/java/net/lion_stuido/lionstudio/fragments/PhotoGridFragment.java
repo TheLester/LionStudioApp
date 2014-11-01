@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
-import static net.lion_stuido.lionstudio.utils.Constants.PHOTO_URL;
+import static net.lion_stuido.lionstudio.utils.Settings.DEFAULT_DOMAIN;
+import static net.lion_stuido.lionstudio.utils.Settings.PHOTO_URL;
 
 /**
  * Created by lester on 12.10.14.

@@ -16,7 +16,7 @@ import net.lion_stuido.lionstudio.view.SquareImageView;
 
 import java.util.ArrayList;
 
-import static net.lion_stuido.lionstudio.utils.Constants.*;
+import static net.lion_stuido.lionstudio.utils.Settings.*;
 
 /**
  * Created by lester on 10.10.14.

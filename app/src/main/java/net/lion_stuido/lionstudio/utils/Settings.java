@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 /**
  * Created by lester on 11.10.14.
  */
-public abstract class Constants {
+public abstract class Settings {
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_DOMAIN = "pict_domain";
 
@@ -20,4 +20,6 @@ public abstract class Constants {
         SharedPreferences mSettings =  context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         return mSettings.getString(APP_PREFERENCES_DOMAIN,"");
     }
+
+
 }

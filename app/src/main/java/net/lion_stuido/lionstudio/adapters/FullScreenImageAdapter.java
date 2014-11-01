@@ -3,6 +3,7 @@ package net.lion_stuido.lionstudio.adapters;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -31,9 +32,10 @@ import java.util.Map;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
-import static net.lion_stuido.lionstudio.utils.Constants.PHOTO_URL;
-import static net.lion_stuido.lionstudio.utils.Constants.getPicturesDomain;
+import static net.lion_stuido.lionstudio.utils.Settings.APP_PREFERENCES;
+import static net.lion_stuido.lionstudio.utils.Settings.DEFAULT_DOMAIN;
+import static net.lion_stuido.lionstudio.utils.Settings.PHOTO_URL;
+import static net.lion_stuido.lionstudio.utils.Settings.getPicturesDomain;
 
 /**
  * Created by lester on 19.10.14.
@@ -68,7 +70,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
         like = (Button) viewLayout.findViewById(R.id.button_like);
         comment = (Button) viewLayout.findViewById(R.id.button_comment);
         Photo currentPhoto = photoList.get(position);
-        setButtonLikeListener(currentPhoto.getId());
+        setButtonLikeListener(currentPhoto);
         setButtonCommentListener(currentPhoto);
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
         imageLoader.get(getPicturesDomain(activity) + currentPhoto.getFilename(), ImageLoader.getImageListener(imgDisplay,
@@ -88,28 +90,38 @@ public class FullScreenImageAdapter extends PagerAdapter {
         ((ViewPager) container).removeView((RelativeLayout) object);
     }
 
-    private void setButtonLikeListener(final int photo_id) {
+    private void setButtonLikeListener(final Photo photo) {
+        final SharedPreferences mSettings = activity.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, String> headers = new HashMap<String, String>();
-                headers.put("photoid", String.valueOf(photo_id));
-                GsonRequest<ResponseStatus> photosReq = new GsonRequest<ResponseStatus>(DEFAULT_DOMAIN + PHOTO_URL,
-                        ResponseStatus.class, headers, null, new Response.Listener<ResponseStatus>() {
-                    @Override
-                    public void onResponse(ResponseStatus responseStatus) {
-                        if (responseStatus.getStatus().equals("OK"))
-                            Toast.makeText(activity, "Вам понравилось фото!", Toast.LENGTH_LONG).show();
-                        else Toast.makeText(activity, "Ошибка", Toast.LENGTH_LONG).show();
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        VolleyLog.d(TAG, "Error: " + error.getMessage());
-                    }
-                });
-                AppController.getInstance().addToRequestQueue(photosReq);
+                if (mSettings.getBoolean(photo.getFilename(), false)) {
+                    Toast.makeText(activity, activity.getResources().getString(R.string.already_liked), Toast.LENGTH_LONG).show();
+                } else {
+                    Map<String, String> headers = new HashMap<String, String>();
+                    headers.put("photoid", String.valueOf(photo.getId()));
+                    GsonRequest<ResponseStatus> photosReq = new GsonRequest<ResponseStatus>(DEFAULT_DOMAIN + PHOTO_URL,
+                            ResponseStatus.class, headers, null, new Response.Listener<ResponseStatus>() {
+                        @Override
+                        public void onResponse(ResponseStatus responseStatus) {
+                            if (responseStatus.getStatus().equals("OK")) {
+                                Toast.makeText(activity, activity.getResources().getString(R.string.like_photo), Toast.LENGTH_LONG).show();
+                                SharedPreferences.Editor editor = mSettings.edit();
+                                editor.putBoolean(photo.getFilename(), true);
+                                editor.commit();
+                            } else
+                                Toast.makeText(activity, activity.getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            VolleyLog.d(TAG, "Error: " + error.getMessage());
+                        }
+                    });
+                    AppController.getInstance().addToRequestQueue(photosReq);
+                }
             }
+
         });
     }
 
@@ -125,4 +137,5 @@ public class FullScreenImageAdapter extends PagerAdapter {
             }
         });
     }
+
 }

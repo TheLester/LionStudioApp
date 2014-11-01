@@ -32,8 +32,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.lion_stuido.lionstudio.utils.Constants.COMMENT_URL;
-import static net.lion_stuido.lionstudio.utils.Constants.DEFAULT_DOMAIN;
+import static net.lion_stuido.lionstudio.utils.Settings.COMMENT_URL;
+import static net.lion_stuido.lionstudio.utils.Settings.DEFAULT_DOMAIN;
 
 /**
  * Created by lester on 21.10.14.

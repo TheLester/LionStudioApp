@@ -25,4 +25,6 @@
     <string name="loading">Загрузка</string>
     <string name="now">Только что</string>
     <string name="error">Ошибка</string>
+    <string name="like_photo">Вам понравилось фото!</string>
+    <string name="already_liked">Вы уже лайкнули это фото!</string>
 </resources>

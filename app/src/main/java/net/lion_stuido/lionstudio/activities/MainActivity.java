@@ -24,7 +24,7 @@ import net.lion_stuido.lionstudio.model.Setting;
 import net.lion_stuido.lionstudio.utils.AppController;
 import net.lion_stuido.lionstudio.utils.GsonRequest;
 
-import static net.lion_stuido.lionstudio.utils.Constants.*;
+import static net.lion_stuido.lionstudio.utils.Settings.*;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {

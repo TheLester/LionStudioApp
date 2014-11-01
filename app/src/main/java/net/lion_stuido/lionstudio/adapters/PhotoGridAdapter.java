@@ -15,7 +15,7 @@ import net.lion_stuido.lionstudio.utils.AppController;
 
 import java.util.ArrayList;
 
-import static net.lion_stuido.lionstudio.utils.Constants.getPicturesDomain;
+import static net.lion_stuido.lionstudio.utils.Settings.getPicturesDomain;
 
 /**
  * Created by lester on 12.10.14.
